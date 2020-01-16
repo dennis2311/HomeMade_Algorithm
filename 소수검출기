@@ -1,0 +1,27 @@
+def primeExtracter(n):
+    primes = [2, 3]
+    non_primes = [4]
+    candidate = 5
+
+    def isPrime(n):
+        for divider in primes:
+            if n % divider == 0:
+                return False
+        return True
+
+    if n == 2:
+        return [1, 2]
+    elif n == 3 | 4:
+        return [1, 2, 3]
+    else:
+        while candidate < n:
+            if isPrime(candidate):
+                primes.append(candidate)
+            else:
+                non_primes.append(candidate)
+            candidate += 1
+
+    return primes, non_primes
+
+primes, non_primes = primeExtracter(2000)
+print(str(primes))
