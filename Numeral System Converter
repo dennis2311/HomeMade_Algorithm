@@ -1,0 +1,27 @@
+# 문제 : n 진법 숫자를 하나씩 올려가며 한자리씩 얘기하는 게임을 p 명이 진행할 때
+# m 번째 순서의 사람이 t 번 말할 수 있는 답을 준비하시오
+
+def converter(n, base):   # 입력된 10진법 자연수 n 을 base 진법으로 변환합니다.
+    selecter = '0123456789ABCDEF'
+    qout, left = divmod(n, base)
+    if qout == 0:
+        return selecter[left]
+    else:
+        return converter(qout, base) + selecter[left]
+
+def makingAllAnswers(n, t, m):
+    allAnswers = ''
+    starter = 0
+    while len(allAnswers) < t*m:
+        allAnswers += str(converter(starter, n))
+        starter += 1
+    return allAnswers
+
+def solution(n, t, m, p):
+    answer = ''
+    allAnswers = makingAllAnswers(n, t, m)
+    answerQue = 0
+    while answerQue < t:
+        answer += allAnswers[p+(answerQue*m)-1]
+        answerQue += 1
+    return answer
