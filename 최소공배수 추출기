@@ -1,0 +1,15 @@
+def makeMinMult(int1, int2):
+    minMult = int1
+    multiflier = 2
+    while minMult % int2 != 0:
+        minMult = int1 * multiflier
+        multiflier += 1
+    return minMult
+
+def solution(arr):
+    answer = 0
+    temp = makeMinMult(arr[0], arr[1])
+    for i in range(2,len(arr)):
+        answer = makeMinMult(temp, arr[i])
+        temp = answer
+    return answer
