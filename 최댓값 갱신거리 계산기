@@ -1,0 +1,38 @@
+def getDayNeeded(progress, speed):
+    day = 0
+    while progress+speed*day<100:
+        day+=1
+    return day
+
+def solution(progresses, speeds):
+    days = []
+    sortedDay = []
+
+    for i in range(len(progresses)):
+        days.append(getDayNeeded(progresses[i], speeds[i]))
+
+    def getMaxIndex(days):
+        maxIndex = 0
+        maxValue = days[maxIndex]
+        for i in range(1, len(days)):
+            if maxValue >= days[i]:
+                if i == len(days)-1:
+                    sortedDay.append(i-maxIndex+1)
+                else:
+                    pass
+
+            else:
+                sortedDay.append(i-maxIndex)
+                maxIndex = i
+                maxValue = days[i]
+                if i == len(days)-1:
+                    sortedDay.append(1)
+
+    print(str(days))
+    getMaxIndex(days)
+    print(str(sortedDay))
+    return sortedDay
+
+progresses = [24, 99, 23, 70, 12, 8, 44, 92, 24]
+speeds = [25, 1, 33, 8 ,24, 12, 34, 2, 3]
+solution(progresses,speeds)
