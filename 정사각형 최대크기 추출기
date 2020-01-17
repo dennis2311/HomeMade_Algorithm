@@ -1,0 +1,44 @@
+def get_max_square_size(arr):
+    max_size = len(arr[0])
+    sums = 0
+
+    for row in range(len(arr)):
+        sums += sum(arr[row])
+
+    if sums == max_size**2:   #전부 1로 채워져있을 때는 가장 큰 정사각형이 출력
+        return max_size
+    else:
+        max_size -= 1
+
+    def is_square(row, col, size):
+        sum_in_range = 0
+        for iter in range(row, row+size):
+            sum_in_range += sum(arr[iter][col:col+size])
+
+        if sum_in_range == size**2:
+            return True
+
+        return False
+
+    def is_square_exist(max_size):
+        limit_point = len(arr) - max_size
+
+        for row in range(limit_point + 1):
+            for col in range(limit_point + 1):
+                if is_square(row, col, max_size):
+                    return True
+
+        return False
+
+    while not is_square_exist(max_size):
+        max_size -= 1
+
+    return max_size
+
+row1 = [1,1,0,1,1]
+row2 = [1,1,1,0,1]
+row3 = [1,1,1,1,1]
+row4 = [0,1,1,0,1]
+row5 = [1,1,1,1,1]
+arr = [row1,row2,row3,row4,row5]
+print(str(get_max_square_size(arr)))
