@@ -1,0 +1,36 @@
+default_alphas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+words = []
+for word in default_alphas:
+    words.append(word)
+
+answer = []
+
+def inner_func(msg):
+
+    word = ""
+    temp_word = ""
+    index = 0
+
+    if len(msg) == 0:
+        pass
+    elif len(msg) == 1:
+        answer.append(words.index(msg[0]))
+    else:
+        while index < len(msg)-1:
+            word = msg[ : index+1]
+            temp_word = msg[ : index+2]
+            if words.count(temp_word) == 0:
+                words.append(temp_word)
+                break
+            index += 1
+        answer.append(words.index(word))
+        inner_func(msg[index+1 : ])
+
+
+def solution(msg):
+    inner_func(msg)
+    print(answer)
+
+msg = "ABABBBABABAAABABB"
+solution(msg)
+print(words)
