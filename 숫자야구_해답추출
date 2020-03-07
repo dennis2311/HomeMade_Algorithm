@@ -1,0 +1,111 @@
+import itertools
+all_candidates = []
+case_candidates = []
+
+class Candidates():
+    def __init__(self, clue):
+        self.num = clue[0]
+        self.strike_count = clue[1]
+        self.ball_count = clue[2]
+        self.separated_num = self.separate(self.num)
+        self.strike_combination(self.separated_num, self.strike_count, self.ball_count)
+        self.copied_cases = case_candidates[:]
+        all_candidates.append(self.copied_cases)
+
+    def separate(self, num):
+        alpha_num = str(num)
+        separated_num = []
+        for num in alpha_num:
+            separated_num.append([int(num), 2-alpha_num.index(num)])
+        return separated_num
+
+    def strike_combination(self, separated_num, strike_count, ball_count):
+        used_num = []
+        for num in separated_num:
+            used_num.append(num[0])
+
+        if strike_count == 0:
+            self.ball_combination(used_num, separated_num, [[]], ball_count)
+        else:
+            strike_use = self.caseExtracter(separated_num, strike_count, 0, [])
+            left_num = []
+            for strike in strike_use:
+                copied_num = separated_num[:]
+                for case in strike:
+                    copied_num.remove(case)
+                left_num.append(copied_num)
+
+            i = 0
+            while i < len(strike_use):
+                self.ball_combination(used_num, left_num[i], strike_use[i], ball_count)
+                i+=1
+
+    def ball_combination(self, used_num, separated_num, strikes, ball_count):
+        if ball_count == 0:
+            use_num = []
+            for strike in strikes:
+                use_num.append(strike[0])
+            except_num = list(set(used_num)-set(use_num))
+            case_candidates.append([use_num, except_num, strikes, [[]]])
+
+        else:
+            ball_use = self.caseExtracter(separated_num, ball_count, 0, [])
+            for balls in ball_use:
+                left_num = []
+                copied_num = separated_num[:]
+                for ball in balls:
+                    copied_num.remove(ball)
+                left_num.append(copied_num)
+
+                except_num = []
+                except_nums = left_num[0]
+                for excepts in except_nums:
+                    except_num.append(excepts[0])
+                use_num = list(set(used_num)-set(except_num))
+                case_candidates.append([use_num, except_num, strikes, balls])
+
+    def caseExtracter(self, numberArr, n, startingPoint, previousNum):
+        allCases = []
+
+        def case_Extracter(numberArr, n, startingPoint, previousArr):
+            if n == 1:
+                for i in range(startingPoint, len(numberArr)):  # n = 1 인 경우 미리 선택된 previous numbers 에 남은 원소들을 하나씩 붙임
+                    previous_arr = previousArr.copy()
+                    previous_arr.extend([numberArr[i]])
+                    allCases.append(previous_arr)
+
+            else:
+                for i in range(startingPoint, len(
+                        numberArr)):  # n > 1 인 경우 하나를 골라 previous numbers 에 할당해준 후 starting point 를 하나 증가시키고 (복원추출 방지)
+                    previous_arr = previousArr.copy()  # n 에서 1 을 빼고 재귀함수로 실행
+                    previous_arr.extend([numberArr[i]])
+                    case_Extracter(numberArr, n - 1, i + 1, previous_arr)
+
+        case_Extracter(numberArr, n, startingPoint, previousNum)
+        return allCases
+
+def solution(baseball):
+    for clue in baseball:
+        case_candidates.clear()
+        Candidates(clue)
+    return 0
+
+baseball = [[123,1,1],[356,1,0],[327,2,0],[489,0,1]]
+solution(baseball)
+
+for candidate in all_candidates:
+    print(candidate)
+
+
+# strike_combination else 부분
+# strike_use = list(itertools.combinations(separated_num,strike))
+# left_num = []
+# print(separated_num)
+# print(strike_use)
+# for strike in strike_use:
+#     strikes = list(strike)
+#     copied_num = separated_num[:]
+#     for case in strikes:
+#         copied_num.remove(case)
+#         left_num.append(copied_num)
+# print(left_num)
