@@ -145,8 +145,13 @@ def is_strike_match(clue1, clue2):
         return True
     else:
         return False
-    
+
 def is_ball_can_get_in(clue1, clue2):
+    clue1_strikes = clue1[2]
+    strike_position = []
+    for strike in clue1_strikes:
+        if len(strike) != 0:
+            strike_position.append(strike[1])
     return False
 
 def trim(some_list):
