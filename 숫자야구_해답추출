@@ -84,18 +84,115 @@ class Candidates():
         case_Extracter(numberArr, n, startingPoint, previousNum)
         return allCases
 
+def is_match(clue1, clue2):
+    if len(list(set(clue1[0]) & set(clue2[1]))) > 0:  # use_num이 except_num에 있는가?
+        return False
+    elif len(list(set(clue1[1]) & set(clue2[0]))) > 0:  # except_num이 use_num에 있는가?
+        return False
+    elif is_strike_ball_cross(clue1, clue2):  # strike여야 하는 숫자가 ball에, ball이어야 하는 숫자가 strike에 있지는 않은가?
+        return False
+    elif not is_strike_match(clue1, clue2):  # strike 끼리 충돌하지는 않는가?
+        return False
+    else:
+        return True
+
+def is_strike_ball_cross(clue1, clue2):
+    clue1_strikes = clue1[2]
+    clue2_strikes = clue2[2]
+    clue1_balls = clue1[3]
+    clue2_balls = clue2[3]
+    for strike1 in clue1_strikes:
+        if clue2_balls.count(strike1):
+            return True
+    for ball1 in clue1_balls:
+        if clue2_strikes.count(ball1):
+            return True
+    return False
+
+def is_strike_match(clue1, clue2):
+    dist = 0
+    clue1_strikes = clue1[2]
+    clue2_strikes = clue2[2]
+    for strike1 in clue1_strikes:
+        strike_num1 = strike1[0]
+        for strike2 in clue2_strikes:
+            strike_num2 = strike2[0]
+            if strike_num1 == strike_num2:
+                if strike1[1] == strike2[1]:
+                    pass
+                else:
+                    dist += 1
+            else:
+                if strike1[1] == strike2[1]:
+                    dist += 1
+                else:
+                    pass
+
+    if dist == 0:
+        return True
+    else:
+        return False
+
+def trim(some_list):
+    trimmed_list = []
+    for var in some_list:
+        if trimmed_list.count(var) == 0:
+            trimmed_list.append(var)
+    return trimmed_list
+
+def merge(clue1, clue2):
+    new_clue = []
+    new_clue.append(list(set(clue1[0]) | set(clue2[0])))
+    new_clue.append(list(set(clue1[1]) | set(clue2[1])))
+    new_clue_strikes = []
+    new_clue_strikes.extend(clue1[2])
+    new_clue_strikes.extend(clue2[2])
+    new_clue.append(trim(new_clue_strikes))
+    new_clue_balls = []
+    new_clue_balls.extend(clue1[3])
+    new_clue_balls.extend(clue2[3])
+    new_clue.append(trim(new_clue_balls))
+    return new_clue
+
+def make_final_candidates(finalcandidates, allcandidates, index):
+    final_candidates = []
+
+    if index == 1:
+        for candidate_first in allcandidates[0]:
+            for candidate_index in allcandidates[1]:
+                if is_match(candidate_first, candidate_index):
+                    final_candidates.append(merge(candidate_first, candidate_index))
+        final = final_candidates[:]
+        return make_final_candidates(final, allcandidates, index+1)
+
+    elif index < len(allcandidates)-1:
+        for candidate_final in finalcandidates:
+            for candidate_index in allcandidates[index]:
+                if is_match(candidate_final, candidate_index):
+                    final_candidates.append(merge(candidate_final, candidate_index))
+        final = final_candidates[:]
+        return make_final_candidates(final, allcandidates, index+1)
+
+    else:  # index == len(allcandidates)-1
+        for candidate_final in finalcandidates:
+            for candidate_last in allcandidates[index]:
+                if is_match(candidate_final, candidate_last):
+                    final_candidates.append(merge(candidate_final, candidate_last))
+        final = final_candidates[:]
+        return final
+
 def solution(baseball):
     for clue in baseball:
         case_candidates.clear()
         Candidates(clue)
+    for candidate in all_candidates:
+        print(candidate)
+    result = make_final_candidates([], all_candidates, 1)
+    print(result)
     return 0
 
 baseball = [[123,1,1],[356,1,0],[327,2,0],[489,0,1]]
 solution(baseball)
-
-for candidate in all_candidates:
-    print(candidate)
-
 
 # strike_combination else 부분
 # strike_use = list(itertools.combinations(separated_num,strike))
