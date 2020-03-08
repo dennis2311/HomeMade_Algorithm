@@ -93,6 +93,8 @@ def is_match(clue1, clue2):
         return False
     elif not is_strike_match(clue1, clue2):  # strike 끼리 충돌하지는 않는가?
         return False
+    elif not is_ball_can_get_in(clue1, clue2):
+        return False
     else:
         return True
 
@@ -102,17 +104,28 @@ def is_strike_ball_cross(clue1, clue2):
     clue1_balls = clue1[3]
     clue2_balls = clue2[3]
     for strike1 in clue1_strikes:
-        if clue2_balls.count(strike1):
-            return True
+        if len(strike1) == 0:
+            continue
+        else:
+            if clue2_balls.count(strike1):
+                return True
     for ball1 in clue1_balls:
-        if clue2_strikes.count(ball1):
-            return True
+        if len(ball1) == 0:
+            continue
+        else:
+            if clue2_strikes.count(ball1):
+                return True
     return False
 
 def is_strike_match(clue1, clue2):
     dist = 0
     clue1_strikes = clue1[2]
     clue2_strikes = clue2[2]
+    if len(clue1_strikes[0]) == 0:
+        return True
+    if len(clue2_strikes[0]) == 0:
+        return True
+
     for strike1 in clue1_strikes:
         strike_num1 = strike1[0]
         for strike2 in clue2_strikes:
@@ -132,6 +145,9 @@ def is_strike_match(clue1, clue2):
         return True
     else:
         return False
+    
+def is_ball_can_get_in(clue1, clue2):
+    return False
 
 def trim(some_list):
     trimmed_list = []
@@ -185,10 +201,42 @@ def solution(baseball):
     for clue in baseball:
         case_candidates.clear()
         Candidates(clue)
-    for candidate in all_candidates:
-        print(candidate)
-    result = make_final_candidates([], all_candidates, 1)
-    print(result)
+    # for candidate in all_candidates:
+    #     print(candidate)
+    result1 = []
+    for candidate0 in all_candidates[0]:
+        print(candidate0)
+        for candidate1 in all_candidates[1]:
+            print(candidate1)
+            if is_match(candidate0, candidate1):
+                result1.append(merge(candidate0, candidate1))
+    print(result1)
+    print(len(result1))
+    print("-----------------------------")
+    result2 = []
+    for candidate_re1 in result1:
+        print(candidate_re1)
+        for candidate2 in all_candidates[2]:
+            print(candidate2)
+            if is_match(candidate_re1, candidate2):
+                result2.append(merge(candidate_re1, candidate2))
+    print(result2)
+    print(len(result2))
+    print("-----------------------------")
+    result3 = []
+    for candidate_re2 in result2:
+        print(candidate_re2)
+        for candidate3 in all_candidates[3]:
+            print(candidate3)
+            if is_match(candidate_re2, candidate3):
+                result3.append(merge(candidate_re2, candidate3))
+    print(result3)
+    print(len(result3))
+    for result in result3:
+        print(result)
+
+    # result = make_final_candidates([], all_candidates, 1)
+    # print(result)
     return 0
 
 baseball = [[123,1,1],[356,1,0],[327,2,0],[489,0,1]]
