@@ -93,7 +93,7 @@ def is_match(clue1, clue2):
         return False
     elif not is_strike_match(clue1, clue2):  # strike 끼리 충돌하지는 않는가?
         return False
-    elif not is_ball_can_get_in(clue1, clue2):
+    elif not is_ball_can_get_in(clue1, clue2):   # () strike 가 두 개일 때, ball 이 남은 자리에 할당되진 않았는가?
         return False
     else:
         return True
