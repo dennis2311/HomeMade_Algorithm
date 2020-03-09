@@ -1,0 +1,15 @@
+def tri_converter(n):
+    if n-1 == 0:
+        return "1"
+    elif n-1 == 1:
+        return "2"
+    elif n-1 == 2:
+        return "4"
+    
+    num = "124"
+    time, left = divmod(n-1, 3)
+    return tri_converter(time)+num[left]     
+
+def solution(n):
+    answer = tri_converter(n)
+    return answer
