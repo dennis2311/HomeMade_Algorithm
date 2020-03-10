@@ -1,0 +1,21 @@
+results = []
+def make_max_num(land):
+    def stack(sum, previous_index, left_land):
+        if len(left_land) == 0:
+            results.append(sum)
+        else:
+            for index in range(len(left_land[0])):
+                if index != previous_index:
+                    stack(sum+left_land[0][index], index, left_land[1:])
+                else:
+                    continue
+
+    for index in range(len(land[0])):
+        stack(land[0][index], index, land[1:])
+
+land = [[1,2,3,5], [5,6,7,8], [4,3,2,1]]
+
+make_max_num(land)
+print(results)
+print(len(results))
+print(max(results))
