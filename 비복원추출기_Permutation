@@ -1,0 +1,16 @@
+def permutation(arr, n):
+    all_cases = []
+    def case_maker(left_arrs, n, previous):
+        if n == 0:
+            all_cases.append(previous)
+        else:
+            for left in left_arrs:
+                next_arr = left_arrs[:]
+                next_arr.remove(left)
+                case_maker(next_arr, n-1, previous+left)
+    case_maker(arr, n, "")
+    return all_cases
+
+arr = ["3","5","1","1","2","7"]
+print(permutation(arr, 4))
+print(len(permutation(arr, 4)))
