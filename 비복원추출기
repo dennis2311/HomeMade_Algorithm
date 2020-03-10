@@ -1,23 +1,27 @@
-def caseExtracter(numberArr, n, startingPoint, previousNum):
+def combination(numberArr, n):
     allCases = []
 
     def case_Extracter(numberArr, n, startingPoint, previousArr):
-        if n == 1:
-            for i in range(startingPoint, len(numberArr)):  # n = 1 인 경우 미리 선택된 previous numbers 에 남은 원소들을 하나씩 붙임
-                previous_arr = previousArr.copy()
-                previous_arr.extend([numberArr[i]])
-                allCases.append(previous_arr)
+        if n > len(numberArr) - startingPoint:
+            pass
 
         else:
-            for i in range(startingPoint, len(numberArr)):   # n > 1 인 경우 하나를 골라 previous numbers 에 할당해준 후 starting point 를 하나 증가시키고 (복원추출 방지)
-                previous_arr = previousArr.copy()            # n 에서 1 을 빼고 재귀함수로 실행  
-                previous_arr.extend([numberArr[i]])
-                case_Extracter(numberArr, n-1, i+1, previous_arr)
+            if n == 1:
+                for i in range(startingPoint, len(numberArr)):  # n = 1 인 경우 미리 선택된 previous numbers 에 남은 원소들을 하나씩 붙임
+                    previous_arr = previousArr.copy()
+                    previous_arr.extend([numberArr[i]])
+                    allCases.append(previous_arr)
 
-    case_Extracter(numberArr, n, startingPoint, previousNum)
+            else:
+                for i in range(startingPoint, len(numberArr)):   # n > 1 인 경우 하나를 골라 previous numbers 에 할당해준 후 starting point 를 하나 증가시키고 (복원추출 방지)
+                    previous_arr = previousArr.copy()            # n 에서 1 을 빼고 재귀함수로 실행
+                    previous_arr.extend([numberArr[i]])
+                    case_Extracter(numberArr, n-1, i+1, previous_arr)
+
+    case_Extracter(numberArr, n, 0, [])
     return allCases
 
 numArr = [1, 2, 4, 5, 7, 11]
-answer = caseExtracter(numArr, 4, 0, [])
+answer = combination(numArr, 4)
 print(str(answer))
 print(len(answer))
