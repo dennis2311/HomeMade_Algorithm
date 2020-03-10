@@ -1,0 +1,27 @@
+def converter(arr):
+    new_arr = []
+    for index in range(len(arr[0])):
+        line = []
+        for row in arr:
+            line.append(row[index])
+        new_arr.append(line)
+    return new_arr
+
+def row_mult(row1, row2):
+    result = 0
+    for index in range(len(row1)):
+        result += row1[index] * row2[index]
+    return result
+
+def multiply(arr1, arr2):
+    result = []
+    for row1 in arr1:
+        new_row = []
+        for row2 in arr2:
+            new_row.append(row_mult(row1, row2))
+        result.append(new_row)
+    return result           
+
+def solution(arr1, arr2):
+    arr2 = converter(arr2)
+    return multiply(arr1, arr2)
