@@ -1,0 +1,13 @@
+def solution(length, cutter):
+	left = length-cutter
+	jump = cutter-1
+	if left%jump == 0:
+		return 1 + (left/jump)
+	else:
+		return 1 + int(left/jump) + 1
+
+user_input = input()
+user_input2 = input()
+dedicated_input = user_input.split()
+length, cutter = int(dedicated_input[0]), int(dedicated_input[1])
+print("\n",int(solution(length, cutter)),"\n")
